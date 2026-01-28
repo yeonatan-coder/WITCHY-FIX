@@ -1,0 +1,11 @@
+{
+  "name": "witchy-unified-root",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "install:frontend": "npm --prefix frontend install",
+    "dev": "npm --prefix frontend run dev -- --port 5173",
+    "build": "npm --prefix frontend run build",
+    "preview": "npm --prefix frontend run preview"
+  }
+}

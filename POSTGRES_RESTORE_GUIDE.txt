@@ -1,0 +1,41 @@
+# Postgres restore (pgAdmin) – QA dump
+
+You received:
+- qa_schema.sql
+- qa_data_only.bac  (custom pg_dump format, DATA ONLY)
+
+Recommended restore flow (pgAdmin 4):
+
+1) Install PostgreSQL + PostGIS
+   - During installation, include "PostGIS" (or install it after).
+2) In pgAdmin:
+   - Create a database, e.g. witchy_qa
+   - Open Query Tool on that DB and run:
+       CREATE EXTENSION IF NOT EXISTS postgis;
+
+3) Restore schema:
+   Option A (best): psql
+     psql -h localhost -U <user> -d witchy_qa -f qa_schema.sql
+   Option B: pgAdmin Query Tool
+     - Open qa_schema.sql, remove the line that starts with "\restrict" if it exists
+     - Execute
+
+4) Restore data_only.bac:
+   - Right click DB -> Restore...
+   - Format: Custom or Tar
+   - Filename: qa_data_only.bac
+   - Restore options:
+       * (Important) "Only data" = ON
+       * "Clean before restore" = OFF
+       * "Disable triggers" = ON (optional, helps)
+   - Run restore
+
+5) Verify:
+   SELECT count(*) FROM public.vertical;
+   SELECT count(*) FROM public.strip;
+   SELECT count(*) FROM public.catalogue;
+
+Backend connection:
+- This project is currently in Archive Mode.
+- Next step: we will add a DB mode (Postgres) and map:
+   vertical / strip / catalogue / order_table / wallet
